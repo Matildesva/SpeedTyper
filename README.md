@@ -68,6 +68,7 @@ We welcome contributions from the community! Follow these steps to contribute:
     
 5.  Open a **Pull Request** for review.
     
+For detailed contribution guidelines read Contribution Guidelines file.
 
 ## License
 

@@ -31,7 +31,17 @@ SpeedTyper is a simple web-based typing speed test application that allows users
 
 ## Installation
 
-...
+### Clone the Repository
+
+git clone https://github.com/matildesva/SpeedTyper.git
+
+cd SpeedTyper
+
+### Open Locally
+
+Simply open index.html in your browser to start using the application.
+
+
 
 ## Usage
 

@@ -12,6 +12,10 @@ let wpmDisplay = document.getElementById("wpm");
 let accuracyDisplay = document.getElementById("accuracy");
 let restartButton = document.getElementById("restart");
 
+let wpmData = []; // main wpm value to changee
+let timeData = [];
+let wpmChart; 
+
 function startGame() {
     let randomIndex = Math.floor(Math.random() * quotes.length);
     quoteText.textContent = quotes[randomIndex];
@@ -23,6 +27,13 @@ function startGame() {
     timerDisplay.textContent = "Time: 0s";
     wpmDisplay.textContent = "WPM: 0";
     accuracyDisplay.textContent = "Accuracy: 100%";
+    
+    wpmData = [];
+    timeData = [];
+    if (wpmChart) {
+        wpmChart.destroy(); //  reset/Start
+    }
+    initializeChart();
 }
 
 function startTimer() {
@@ -35,13 +46,15 @@ function startTimer() {
 function updateTimer() {
     let elapsedTime = (new Date().getTime() - startTime) / 1000;
     timerDisplay.textContent = `Time: ${Math.floor(elapsedTime)}s`;
-    calculateWPM(elapsedTime);
+    let wpm = calculateWPM(elapsedTime);
+    updateChart(Math.floor(elapsedTime), wpm);
 }
 
 function calculateWPM(time) {
     let wordsTyped = inputBox.value.trim().split(/\s+/).length;
     let wpm = time > 0 ? Math.round((wordsTyped / time) * 60) : 0;
     wpmDisplay.textContent = `WPM: ${wpm}`;
+    return wpm;
 }
 
 function calculateAccuracy() {
@@ -66,8 +79,51 @@ function checkCompletion() {
     if (typedText === correctText) {
         clearInterval(timer);
         inputBox.disabled = true;
-        timerDisplay.textContent += " ✅"; // Indicate that the timer has stopped
+        timerDisplay.textContent += " ✅";
     }
+}
+
+function initializeChart() {
+    const ctx = document.getElementById('wpmChart').getContext('2d');
+    wpmChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeData,
+            datasets: [{
+                label: 'WPM Over Time',
+                data: wpmData,
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time (s)'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'WPM'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateChart(time, wpm) {
+    timeData.push(time);
+    wpmData.push(wpm);
+    wpmChart.data.labels = timeData;
+    wpmChart.data.datasets[0].data = wpmData;
+    wpmChart.update();
 }
 
 inputBox.addEventListener("input", () => {

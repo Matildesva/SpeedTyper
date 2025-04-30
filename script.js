@@ -1,85 +1,97 @@
 const quotes = [
     "The quick brown fox jumps over the lazy dog.",
     "Typing fast requires practice and patience.",
-    "SpeedTyper helps improve your typing skills."
+    "SpeedTyper helps improve your typing skills.",
+    "Consistency is the key to improving your typing speed.",
+    "Practice makes progress."
 ];
 
 let timer, startTime;
-let quoteText = document.getElementById("quote");
+let quoteText =  document.getElementById("quote");
 let inputBox = document.getElementById("inputBox");
 let timerDisplay = document.getElementById("timer");
 let wpmDisplay = document.getElementById("wpm");
 let accuracyDisplay = document.getElementById("accuracy");
 let restartButton = document.getElementById("restart");
 
-let wpmData = []; // main wpm value to changee
-let timeData = [];
-let wpmChart; 
+let wpmData = [], timeData = [];
+let wpmChart;
 
 function startGame() {
     let randomIndex = Math.floor(Math.random() * quotes.length);
     quoteText.textContent = quotes[randomIndex];
     inputBox.value = "";
-    inputBox.focus();
     inputBox.disabled = false;
+    inputBox.focus();
     startTime = null;
     clearInterval(timer);
-    timerDisplay.textContent = "Time: 0s";
+
+    timerDisplay.textContent =  "Time: 0s";
     wpmDisplay.textContent = "WPM: 0";
     accuracyDisplay.textContent = "Accuracy: 100%";
-    
+
     wpmData = [];
     timeData = [];
-    if (wpmChart) {
-        wpmChart.destroy(); //  reset/Start
-    }
+    if (wpmChart) wpmChart.destroy();
     initializeChart();
 }
 
 function startTimer() {
     if (!startTime) {
-        startTime = new Date().getTime();
+        startTime = Date.now();
         timer = setInterval(updateTimer, 1000);
     }
 }
 
 function updateTimer() {
-    let elapsedTime = (new Date().getTime() - startTime) / 1000;
-    timerDisplay.textContent = `Time: ${Math.floor(elapsedTime)}s`;
-    let wpm = calculateWPM(elapsedTime);
-    updateChart(Math.floor(elapsedTime), wpm);
+    const elapsed = (Date.now() - startTime) / 1000;
+    const seconds = Math.floor(elapsed);
+    timerDisplay.textContent = `Time: ${seconds}s`;
+
+    const wpm = calculateWPM(elapsed);
+    updateChart(seconds, wpm);
+
+    if (seconds >= 60) endGame(); // optional limit
 }
 
 function calculateWPM(time) {
-    let wordsTyped = inputBox.value.trim().split(/\s+/).length;
-    let wpm = time > 0 ? Math.round((wordsTyped / time) * 60) : 0;
+    const typedWords = inputBox.value.trim().split(/\s+/).filter(Boolean).length;
+    const wpm = time > 0 ? Math.round((typedWords / time) * 60) : 0;
     wpmDisplay.textContent = `WPM: ${wpm}`;
     return wpm;
 }
 
 function calculateAccuracy() {
-    let typedText = inputBox.value.trim();
-    let correctText = quoteText.textContent.trim();
-    let correctChars = 0;
+    const typed = inputBox.value;
+    const target = quoteText.textContent;
+    let correct = 0;
 
-    for (let i = 0; i < typedText.length; i++) {
-        if (typedText[i] === correctText[i]) {
-            correctChars++;
-        }
+    for (let i = 0; i < typed.length; i++) {
+        if (typed[i] === target[i]) correct++;
     }
 
-    let accuracy = (correctChars / correctText.length) * 100;
+    const accuracy = (correct / target.length) * 100;
     accuracyDisplay.textContent = `Accuracy: ${Math.round(accuracy)}%`;
 }
 
 function checkCompletion() {
-    let typedText = inputBox.value.trim();
-    let correctText = quoteText.textContent.trim();
+    if (inputBox.value.trim() === quoteText.textContent.trim()) {
+        endGame(true);
+    }
+}
 
-    if (typedText === correctText) {
-        clearInterval(timer);
-        inputBox.disabled = true;
-        timerDisplay.textContent += " ✅";
+function endGame(success = false) {
+    clearInterval(timer);
+    inputBox.disabled = true;
+    const finalTime = Math.floor((Date.now() - startTime) / 1000);
+    const finalWPM = calculateWPM(finalTime);
+    calculateAccuracy();
+    timerDisplay.textContent += " ✅";
+    if (success) {
+        setTimeout(() => {
+            alert(`✅ Well done!\nWPM: ${finalWPM}\nAccuracy: ${accuracyDisplay.textContent.split(": ")[1]}`);
+            startGame();
+        }, 200);
     }
 }
 
@@ -99,6 +111,15 @@ function initializeChart() {
         },
         options: {
             responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Typing Speed (WPM)',
+                    font: {
+                        size: 16
+                    }
+                }
+            },
             scales: {
                 x: {
                     title: {
@@ -110,7 +131,7 @@ function initializeChart() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'WPM'
+                        text: 'Words Per Minute'
                     }
                 }
             }
@@ -132,13 +153,18 @@ inputBox.addEventListener("input", () => {
     checkCompletion();
 });
 
-inputBox.addEventListener("keydown", (event) => {
+inputBox.addEventListener( "keydown", (event) => {
     if (event.key === "Enter") {
-        event.preventDefault();
-        checkCompletion();
+        event.preventDefault(); // disables line breaks
     }
+
 });
 
-restartButton.addEventListener("click", startGame);
+
+
+restartButton.addEventListener("click", () => {
+    const confirmRestart = confirm("Restart the test?");
+    if (confirmRestart) startGame();
+});
 
 window.onload = startGame;

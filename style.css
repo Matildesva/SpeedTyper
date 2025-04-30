@@ -31,3 +31,8 @@ button {
     margin-top: 10px;
     border-radius: 5px;
 }
+canvas {
+    margin-top: 20px;
+    width: 100% !important;
+    height: auto !important;
+}

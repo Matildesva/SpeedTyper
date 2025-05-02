@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SpeedTyper</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
   <script src="script.js" defer></script>
 </head>
 <body>
+
+  <header>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="index.html">Main</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  
+
   <div class="container">
     <h1>SpeedTyper - Typing Speed Test</h1>
     <p id="quote">Loading sentence...</p>
@@ -19,6 +32,12 @@
     <button id="restart">Restart</button>
 
     <canvas id="wpmChart" width="400" height="200"></canvas> 
+
+    <div id="sessionScores">
+      <h3>Session Scores</h3>
+      <ul id="scoreList"></ul>
+    </div>
   </div>
+
 </body>
 </html>

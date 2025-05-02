@@ -36,3 +36,38 @@ canvas {
     width: 100% !important;
     height: auto !important;
 }
+/* Header styles */
+header {
+    width: 100%;
+    background-color: #007BFF;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #e0f0ff;
+}

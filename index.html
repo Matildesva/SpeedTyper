@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SpeedTyper</title>
@@ -16,26 +17,31 @@
         <li><a href="index.html">Main</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="community.html">Community</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="why.html">Why Typing?</a></li>
       </ul>
     </nav>
   </header>
   
-  
-
   <div class="container">
-    <h1>SpeedTyper - Typing Speed Test</h1>
+    <h1>SpeedTyper Typing Speed Test</h1>
     <p id="quote">Loading sentence...</p>
-    <textarea id="inputBox" placeholder="Start typing here..."></textarea>
-    <p id="timer">Time: 0s</p>
-    <p id="wpm">WPM: 0</p>
-    <p id="accuracy">Accuracy: 100%</p>
-    <button id="restart">Restart</button>
 
-    <canvas id="wpmChart" width="400" height="200"></canvas> 
+    <div class="main-content">
+      <div class="typing-section">
+        <textarea id="inputBox" placeholder="Start typing here..."></textarea>
+        <p id="timer">Time: 0s</p>
+        <p id="wpm">WPM: 0</p>
+        <p id="accuracy">Accuracy: 100%</p>
+        <button id="restart">Restart</button>
+        <canvas id="wpmChart" width="400" height="200"></canvas>
+      </div>
 
-    <div id="sessionScores">
-      <h3>Session Scores</h3>
-      <ul id="scoreList"></ul>
+      <div id="sessionScores">
+        <h3>Session Scores</h3>
+        <ul id="scoreList"></ul>
+      </div>
     </div>
   </div>
 
